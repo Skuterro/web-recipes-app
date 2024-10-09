@@ -28,6 +28,7 @@ export const HomePage = () => {
             />
           </div>
         </div>
+        <div className="bg-black h-[5vh]"></div>
       </section>
     </Layout>
   );

@@ -2,10 +2,18 @@ import { NavLink } from "react-router-dom";
 import { FiUser } from "react-icons/fi";
 import { LuShoppingCart } from "react-icons/lu";
 import { TbToolsKitchen3 } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate("/login");
+  }
+
   return (
-    <nav className="bg-white w-full  flex items-center justify-between h-[10vh] px-20">
+    <nav className="bg-white w-full  flex items-center justify-between h-[10vh] px-20 shadow-lg">
       <div className="flex">
         <span className="px-2 text-2xl font-bold -mx-3">RECIPIO</span>
         <TbToolsKitchen3 className="text-black text-xl"/>
@@ -20,7 +28,10 @@ export const Navbar = () => {
         <button className="text-3xl text-black hover:text-orange-500 transition-colors duration-300 ease-in-out" >
           <LuShoppingCart/> 
         </button>
-        <button className="text-3xl text-black hover:text-orange-500 transition-colors duration-300 ease-in-out" >
+        <button 
+          className="text-3xl text-black hover:text-orange-500 transition-colors duration-300 ease-in-out" 
+          onClick={handleNavigate}
+        >
           <FiUser/> 
         </button>
       </div>
@@ -34,7 +45,7 @@ interface NavItemProps {
 }
 
 
-const NavItem = ({to, text}: NavItemProps) => {
+export const NavItem = ({to, text}: NavItemProps) => {
   return (
     <NavLink
       to={to}

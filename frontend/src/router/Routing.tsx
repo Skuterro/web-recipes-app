@@ -4,6 +4,8 @@ import { ScrollToTop } from "./Scroll";
 import { HomePage } from "../pages/HomePage";
 import { RecipesPage } from "../pages/RecipesPage";
 import { CreateRecipePage } from "../pages/CreateRecipePage";
+import { LoginPage } from "../pages/LoginPage";
+import { RegisterPage} from "../pages/RegisterPage"
 
 export const Routing = () => {
   return (
@@ -13,6 +15,9 @@ export const Routing = () => {
 				<Route path="/" Component={HomePage}/>
 				<Route path="/recipes" Component={RecipesPage}/>
 				<Route path="/recipes/create" Component={CreateRecipePage}/>
+				<Route path="/login" Component={LoginPage}/>
+				<Route path="/register" Component={RegisterPage}/>
+			
 			</Routes>
 		</Router>
   );

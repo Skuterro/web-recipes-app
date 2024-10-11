@@ -5,7 +5,7 @@ import { TbToolsKitchen3 } from "react-icons/tb";
 
 export const Navbar = () => {
   return (
-    <nav className="bg-white w-full fixed flex items-center justify-between h-[10vh] px-20">
+    <nav className="bg-white w-full  flex items-center justify-between h-[10vh] px-20">
       <div className="flex">
         <span className="px-2 text-2xl font-bold -mx-3">RECIPIO</span>
         <TbToolsKitchen3 className="text-black text-xl"/>

@@ -1,7 +1,15 @@
 import { Layout } from "../components/layout/Layout";
+import { useNavigate } from "react-router-dom";
 import paella from "../images/spanish-paella-isolated-ai-generated-png.webp"
 
 export const HomePage = () => {
+
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate("/recipes");
+  }
+
   return(
     <Layout>
       <section>
@@ -16,6 +24,7 @@ export const HomePage = () => {
             <button 
               className="px-12 py-2 text-white text-xl border-white border-2 rounded-2xl 
                       hover:border-orange-500 hover:text-orange-500 transition-colors duration-500 ease-in-out"
+              onClick={handleNavigate}
               >
               View recipes
             </button>

@@ -35,9 +35,9 @@ export const Footer = () => {
                 <FaArrowDown className="text-primary text-4xl" />
               </p>
               <p className="flex flex-row gap-8 text-3xl">
-                <FaFacebook />
-                <SiInstagram />
-                <FaLinkedin />
+                <FaFacebook className="text-blue-700"/>
+                <SiInstagram className="text-purple-600"/>
+                <FaLinkedin className="text-blue-800"/>
               </p>
               <div>
                 <form className="flex items-center bg-gray-800 rounded-xl px-2">

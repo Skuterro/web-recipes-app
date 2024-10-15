@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export const CreateRecipePage = () => {
-  const[recipes, setRecipes] = useState<Recipe[]>([]);
+  //const[recipes, setRecipes] = useState<Recipe[]>([]);
 
   const handleCreate = async(values:CreateRecipeForm) => {
 
@@ -28,7 +28,7 @@ export const CreateRecipePage = () => {
       author: values.author
     };
   
-  //const response = await axios.post("");
+    const response = await axios.post("https://localhost:7061/api/Recipes", recipe);
   };
 
   return(

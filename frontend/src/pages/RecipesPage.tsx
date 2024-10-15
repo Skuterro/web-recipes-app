@@ -20,9 +20,9 @@ export const RecipesPage = () => {
 	const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   const handleFetchRecipes = async () => {
-    //const data = await getRecipes();
-    //setRecipes(data);
-    //console.log(data);
+    const data = await getRecipes();
+    setRecipes(data);
+    console.log(data);
   }
 
   useEffect(() => {

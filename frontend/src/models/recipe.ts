@@ -3,4 +3,5 @@ export interface Recipe{
     name: string;
     author: string;
     description: string;
+    category: string;
 }

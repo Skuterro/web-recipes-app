@@ -7,8 +7,7 @@ import { FaArrowDown } from "react-icons/fa";
 
 export const Footer = () => {
   return (
-
-        <footer className="bg-white p-5 rounded-t-3xl -mt-5">
+        <footer className="bg-gradient-to-b from-gray-100 to-white p-5 rounded-t-3xl -mt-5">
           <div className="w-full flex justify-between items-center">
             <div className="flex justify-center gap-10 text-gray-500 font-bold w-2/5">
               <a

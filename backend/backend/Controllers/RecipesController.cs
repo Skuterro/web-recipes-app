@@ -25,7 +25,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Recipe>> getRecipeById(int id)
+        public async Task<ActionResult<Recipe>> getRecipeById(Guid id)
         {
             var recipe = await db.Recipes.FindAsync(id);
 
@@ -38,17 +38,36 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Recipe>> addRecipe([FromBody] Recipe recipe)
+        public async Task<ActionResult<Recipe>> addRecipe([FromForm] RecipeCreateDto recipeDto)
         {
-            if (recipe == null)
+            byte[]? imageData = null;
+
+            if (recipeDto.Image != null)
             {
-                return BadRequest("Invalid recipe body.");
+                using (var memoryStream = new MemoryStream())
+                {
+                    await recipeDto.Image.CopyToAsync(memoryStream);
+
+                    imageData = memoryStream.ToArray();
+                }
             }
 
+            var recipe = new Recipe
+            {
+                Id = Guid.NewGuid(),
+                Name = recipeDto.Name,
+                Author = recipeDto.Author,
+                Description = recipeDto.Description,
+                Category = recipeDto.Category,
+                Ingredients = recipeDto.Ingredients,
+                ImageData = imageData
+            };
+
             db.Recipes.Add(recipe);
+
             await db.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(getRecipeById), new { id = recipe.Id }, recipe);
+            return Ok(recipe);
         }
 
         [HttpDelete("{id}")]

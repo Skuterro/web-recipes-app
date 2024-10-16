@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Recipe } from "../models/recipe";
 import { getRecipes } from "../requests/recipe";
 import { Wrapper } from "../components/layout/Wrapper";
+import { useNavigate } from "react-router-dom";
 
 interface RecipeCardProps {
   name: string;
@@ -22,7 +23,8 @@ export const RecipesPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchTerm, setSearchTerm] = useState<string>(""); // Dodaj stan wyszukiwania
 
-  // Logika filtrowania, uwzględniająca kategorię i wyszukiwanie po nazwie
+  const navigate = useNavigate();
+
   const filteredRecipes = recipes.filter((recipe) => {
     const matchesCategory =
       selectedCategory === "All" || recipe.category === selectedCategory;
@@ -31,6 +33,10 @@ export const RecipesPage = () => {
       .includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const handleNavigate = () => {
+    navigate("/recipes/create");
+  }
 
   const handleFetchRecipes = async () => {
     const data = await getRecipes();
@@ -46,12 +52,21 @@ export const RecipesPage = () => {
     <Layout>
       <Wrapper>
         <section className="min-h-[60vh]">
+          <div className="flex justify-center mt-10">
+            <button
+              className="px-12 py-2 text-black text-xl border-black border-2 rounded-2xl 
+              hover:text-white hover:bg-orange-500 hover:border-white transition-colors duration-500 ease-in-out"
+              onClick={handleNavigate}
+            >
+              Create a recipe
+            </button>
+          </div>
           <div className="max-w-6xl mx-auto my-10">
             <div className="mb-4 flex gap-6">
-              <div>
                 <label htmlFor="category-filter" className="mr-2 font-semibold">
                   Filter by category:
                 </label>
+
                 <select
                   id="category-filter"
                   value={selectedCategory}
@@ -64,8 +79,7 @@ export const RecipesPage = () => {
                     </option>
                   ))}
                 </select>
-              </div>
-              <div>
+
                 <label htmlFor="search" className="mr-2 font-semibold">
                   Search by name:
                 </label>
@@ -77,7 +91,6 @@ export const RecipesPage = () => {
                   className="border rounded p-2"
                   placeholder="Search recipes..."
                 />
-              </div>
             </div>
 
             <RecipesList>

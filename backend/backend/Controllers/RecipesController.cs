@@ -1,5 +1,5 @@
-﻿using backend.data;
-using backend.models;
+﻿using backend.models;
+using backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,17 +9,17 @@ namespace backend.Controllers
     [ApiController]
     public class RecipesController : ControllerBase
     {
-        private readonly DataContext db;
+        private readonly RecipeService recipeService;
 
-        public RecipesController(DataContext db)
+        public RecipesController(RecipeService recipeService)
         {
-            this.db = db;
+            this.recipeService = recipeService;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Recipe>>> getRecipes()
         {
-            var recipes = await db.Recipes.ToListAsync();
+            var recipes = await recipeService.GetRecipesAsync();
             
             return Ok(recipes);
         }
@@ -27,61 +27,23 @@ namespace backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Recipe>> getRecipeById(Guid id)
         {
-            var recipe = await db.Recipes.FindAsync(id);
-
-            if (recipe == null)
-            {
-                return NotFound("Recipe does not exist.");
-            }
+            var recipe = await recipeService.GetRecipeByIdAsync(id);   
 
             return Ok(recipe);
         }
 
         [HttpPost]
         public async Task<ActionResult<Recipe>> addRecipe([FromForm] RecipeCreateDto recipeDto)
-        {
-            byte[]? imageData = null;
-
-            if (recipeDto.Image != null)
-            {
-                using (var memoryStream = new MemoryStream())
-                {
-                    await recipeDto.Image.CopyToAsync(memoryStream);
-
-                    imageData = memoryStream.ToArray();
-                }
-            }
-
-            var recipe = new Recipe
-            {
-                Id = Guid.NewGuid(),
-                Name = recipeDto.Name,
-                Author = recipeDto.Author,
-                Description = recipeDto.Description,
-                Category = recipeDto.Category,
-                Ingredients = recipeDto.Ingredients,
-                ImageData = imageData
-            };
-
-            db.Recipes.Add(recipe);
-
-            await db.SaveChangesAsync();
-
-            return Ok(recipe);
+        { 
+            var recipe = await recipeService.AddRecipeAsync(recipeDto);
+        
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> deleteRecipe(int id)
+        public async Task<ActionResult> deleteRecipe(Guid id)
         {
-            var recipe = await db.Recipes.FindAsync(id);
-            
-            if(recipe == null)
-            {
-                return NotFound("Recipe does not exist.");
-            }
-
-            db.Recipes.Remove(recipe);
-            await db.SaveChangesAsync();
+            var recipe = await recipeService.DeleteRecipeAsync(id);
             
             return NoContent();
         }

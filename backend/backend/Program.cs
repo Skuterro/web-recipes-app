@@ -1,5 +1,7 @@
 using backend.data;
 using Microsoft.EntityFrameworkCore;
+using backend.Services;
+using backend.IService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<RecipeService>();
 
 builder.Services.AddCors(options =>
 {

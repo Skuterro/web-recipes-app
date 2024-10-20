@@ -4,12 +4,14 @@ import { Recipe } from "../models/recipe";
 import { getRecipes } from "../requests/recipe";
 import { Wrapper } from "../components/layout/Wrapper";
 import { useNavigate } from "react-router-dom";
+import { RecipeModal } from "../components/UI/RecipeModal";
 
 interface RecipeCardProps {
   name: string;
   description: string;
   author: string;
   category: string;
+  image?: string | null;
 }
 
 interface RecipesListProps {
@@ -21,9 +23,12 @@ const categories = ["All", "Pasta", "Fast Food", "Vege", "Undefined"];
 export const RecipesPage = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [searchTerm, setSearchTerm] = useState<string>(""); // Dodaj stan wyszukiwania
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const navigate = useNavigate();
+
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null); // Stan dla wybranego przepisu
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Stan otwarcia modala
 
   const filteredRecipes = recipes.filter((recipe) => {
     const matchesCategory =
@@ -36,12 +41,21 @@ export const RecipesPage = () => {
 
   const handleNavigate = () => {
     navigate("/recipes/create");
-  }
+  };
 
   const handleFetchRecipes = async () => {
     const data = await getRecipes();
     setRecipes(data);
-    console.log(data);
+  };
+
+  const handleRecipeClick = (recipe: Recipe) => {
+    setSelectedRecipe(recipe); 
+    setIsModalOpen(true); 
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false); 
+    setSelectedRecipe(null); 
   };
 
   useEffect(() => {
@@ -63,50 +77,56 @@ export const RecipesPage = () => {
           </div>
           <div className="max-w-6xl mx-auto my-10">
             <div className="mb-4 flex gap-6">
-                <label htmlFor="category-filter" className="mr-2 font-semibold">
-                  Filter by category:
-                </label>
+              <label htmlFor="category-filter" className="mr-2 font-semibold">
+                Filter by category:
+              </label>
 
-                <select
-                  id="category-filter"
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="border rounded p-2"
-                >
-                  {categories.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
+              <select
+                id="category-filter"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="border rounded p-2"
+              >
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
 
-                <label htmlFor="search" className="mr-2 font-semibold">
-                  Search by name:
-                </label>
-                <input
-                  id="search"
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="border rounded p-2"
-                  placeholder="Search recipes..."
-                />
+              <label htmlFor="search" className="mr-2 font-semibold">
+                Search by name:
+              </label>
+              <input
+                id="search"
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="border rounded p-2"
+                placeholder="Search recipes..."
+              />
             </div>
 
             <RecipesList>
               {filteredRecipes.length === 0 && <span>No recipes to show!</span>}
               {filteredRecipes.map((recipe) => (
                 <RecipeCard
-                  key={recipe.name} // Klucz dla unikalności
                   name={recipe.name}
                   description={recipe.description}
                   author={recipe.author}
                   category={recipe.category}
-                />
+                  image={recipe.imageData}
+                  onClick={() => handleRecipeClick(recipe)}
+                  />
               ))}
             </RecipesList>
           </div>
         </section>
+        <RecipeModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          recipe={selectedRecipe}
+        />
       </Wrapper>
     </Layout>
   );
@@ -117,16 +137,22 @@ const RecipeCard = ({
   description,
   author,
   category,
-}: RecipeCardProps) => {
-  const handleClick = () => {
-    console.log(`recipe clicked: ${name}`);
-  };
+  image,
+  onClick,
+}: RecipeCardProps & { onClick: () => void}) => {
 
   return (
     <li
       className="bg-white shadow-md rounded-lg p-4 cursor-pointer"
-      onClick={handleClick}
+      onClick={onClick}
     >
+      {image && (
+        <img
+          src={`data:image/jpeg;base64,${image}`}
+          alt={name}
+          className="w-full h-48 object-cover rounded-lg mb-4"
+        />
+      )}
       <h3 className="text-lg font-semibold">{name}</h3>
       <p className="text-gray-700">{description}</p>
       <p className="text-gray-700">{category}</p>

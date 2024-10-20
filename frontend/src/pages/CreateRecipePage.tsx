@@ -34,7 +34,7 @@ export const CreateRecipePage = () => {
     formData.append("author", values.author);
     formData.append("description", values.description);
     formData.append("category", values.category);
-    //formData.append("image", values.image as Blob);
+    formData.append("image", values.image as Blob);
     values.ingredients.forEach((ingredient, index) => {
       formData.append(`ingredients[${index}]`, ingredient);
     });
@@ -166,7 +166,6 @@ export const CreateRecipePage = () => {
                   }}
                   className="border rounded p-2 w-full"
                 />
-                <ErrorMessage name="image" component="div" className="text-red-600" />
               </div>
 
               <button

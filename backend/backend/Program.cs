@@ -2,14 +2,14 @@ using backend.data;
 using Microsoft.EntityFrameworkCore;
 using backend.Services;
 using backend.IService;
+using backend.models;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddScoped<RecipeService>();
 
 builder.Services.AddCors(options =>
@@ -19,7 +19,7 @@ builder.Services.AddCors(options =>
         policyBuilder.WithOrigins("http://localhost:3000");
         policyBuilder.AllowAnyHeader();
         policyBuilder.AllowAnyMethod();
-        //policyBuilder.AllowCredentials(); do autoryzacji 
+       
     });
 });
 
@@ -27,6 +27,10 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
@@ -40,6 +44,7 @@ app.UseCors("frontend-react");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

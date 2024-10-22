@@ -5,15 +5,30 @@ import { FaUser } from "react-icons/fa";
 import { Layout } from "../components/layout/Layout";
 import { NavItem } from "../components/layout/Navbar";
 import * as Yup from "yup";
+import axios from 'axios';
+
+interface RegisterUserForm {
+  userName: string;
+  email: string;
+  password: string;
+}
 
 export const RegisterPage = () => {
 
-  const handleRegister = () => {
-    console.log("user logged in");
-  }
+  const handleRegister = async (values: RegisterUserForm) => {
+    const formData = new FormData();
+    formData.append("userName",values.userName);
+    formData.append("email",values.email);
+    formData.append("password",values.password);
+    
+
+    const response = await axios.post("https://localhost:7061/api/Auth/register", formData);
+
+    console.log(response.data);
+  };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
+    userName: Yup.string().required("Name is required"),
     email: Yup.string().required("E-mail is required"),
     password: Yup.string().required("Pasword is required"),
   });
@@ -30,7 +45,7 @@ export const RegisterPage = () => {
           <NavItem to="/login" text="Sign in"/>
         </div>
         <Formik
-          initialValues={{ name: '', email: '', password: '' }}
+          initialValues={{ userName: '', email: '', password: '' }}
           onSubmit={handleRegister}
           validationSchema={validationSchema}
         >
@@ -39,7 +54,7 @@ export const RegisterPage = () => {
               <div className="flex items-center bg-custom-gray-3 rounded-xl px-2 mb-2 w-full">
                 <FaUser className="mr-2 ml-1 text-white "  />
                 <Field
-                  name="username"
+                  name="userName"
                   type="text"
                   placeholder="Username"
                   className="bg-custom-gray-3 p-2 border-none outline-none w-full placeholder-white text-white"

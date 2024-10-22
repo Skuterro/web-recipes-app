@@ -24,7 +24,6 @@ const validationSchema = Yup.object().shape({
   ingredients: Yup.array().of(
     Yup.string().required("Składnik nie może być pusty")
   ),
-  //image: Yup.mixed().nullable().required("Zdjęcie jest wymagane")
 });
 
 export const CreateRecipePage = () => {

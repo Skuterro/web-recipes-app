@@ -31,7 +31,7 @@ namespace backend.Services
             return recipe;
         }
 
-        public async Task<Recipe> AddRecipeAsync(RecipeCreateDto recipeDto)
+        public async Task<Recipe> AddRecipeAsync(CreateRecipeDto recipeDto)
         {
             byte[]? imageData = null;
 

@@ -33,7 +33,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Recipe>> addRecipe([FromForm] RecipeCreateDto recipeDto)
+        public async Task<ActionResult<Recipe>> addRecipe([FromForm] CreateRecipeDto recipeDto)
         { 
             var recipe = await recipeService.AddRecipeAsync(recipeDto);
         

@@ -6,7 +6,7 @@ namespace backend.IService
     {
         Task<List<Recipe>> GetRecipesAsync();
         Task<Recipe?> GetRecipeByIdAsync(Guid id);
-        Task<Recipe> AddRecipeAsync(RecipeCreateDto recipeDto);
+        Task<Recipe> AddRecipeAsync(CreateRecipeDto recipeDto);
         Task<bool> DeleteRecipeAsync(Guid id);
     }
 }

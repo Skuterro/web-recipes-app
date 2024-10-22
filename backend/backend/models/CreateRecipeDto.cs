@@ -1,6 +1,6 @@
 ﻿namespace backend.models
 {
-    public class RecipeCreateDto
+    public class CreateRecipeDto
     {
         public string Name { get; set; } = null!;
         public string Author { get; set; } = null!;

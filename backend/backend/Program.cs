@@ -4,6 +4,7 @@ using backend.Services;
 using backend.IService;
 using backend.models;
 using Microsoft.AspNetCore.Identity;
+using backend.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<RecipeService>();
+builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddCors(options =>
 {

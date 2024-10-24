@@ -4,16 +4,29 @@ import { GiPadlock } from "react-icons/gi";
 import { Layout } from "../components/layout/Layout";
 import { NavItem } from "../components/layout/Navbar";
 import * as Yup from "yup";
+import axios from 'axios';
+
+interface LoginUserForm {
+  userName: string;
+  password: string;
+}
 
 export const LoginPage = () => {
 
-  const handleLogin = () => {
-    console.log("user logged in");
+  const handleLogin = async (values: LoginUserForm) => {
+    const formData = new FormData();
+    formData.append("userName", values.userName);
+    formData.append("password", values.password);
+    console.log(formData);
+    const response = await axios.post("https://localhost:7061/api/Auth/login", formData);
+    
+
+    console.log(response.data);
   }
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().required("E-mail is required"),
-    password: Yup.string().required("Pasword is required"),
+    userName: Yup.string().required("Username is required"),
+    password: Yup.string().required("Password is required"),
   });
 
   return(
@@ -28,7 +41,7 @@ export const LoginPage = () => {
           <NavItem to="/register" text="Sign up"/>
         </div>
         <Formik
-          initialValues={{ email: '', password: '' }}
+          initialValues={{ userName: '', password: '' }}
           onSubmit={handleLogin}
           validationSchema={validationSchema}
         >
@@ -37,9 +50,9 @@ export const LoginPage = () => {
               <div className="flex items-center bg-custom-gray-3 rounded-xl px-2 mb-2 w-full">
                 <FaRegEnvelope className="mr-2 ml-1 text-white "  />
                 <Field
-                  name="email"
-                  type="email"
-                  placeholder="Email"
+                  name="userName"
+                  type="text"
+                  placeholder="Username"
                   className="bg-custom-gray-3 p-2 border-none outline-none w-full placeholder-white text-white"
                 />
                 

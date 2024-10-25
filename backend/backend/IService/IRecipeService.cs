@@ -1,4 +1,5 @@
-﻿using backend.models;
+﻿using backend.Entities;
+using backend.models;
 
 namespace backend.IService
 {

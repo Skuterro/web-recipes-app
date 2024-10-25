@@ -1,10 +1,12 @@
 ﻿using backend.data;
+using backend.Entities;
 using backend.IService;
 using backend.models;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services
 {
+
     public class RecipeService : IRecipeService
     {
         private readonly DataContext db;

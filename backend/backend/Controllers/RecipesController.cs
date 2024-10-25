@@ -1,8 +1,7 @@
-﻿using backend.models;
-using backend.Services;
-using Microsoft.AspNetCore.Authorization;
+﻿using backend.Entities;
+using backend.IService;
+using backend.models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -10,9 +9,11 @@ namespace backend.Controllers
     [ApiController]
     public class RecipesController : ControllerBase
     {
-        private readonly RecipeService recipeService;
+        private readonly IRecipeService recipeService;
 
-        public RecipesController(RecipeService recipeService)
+
+        //TODO przerobić aby było cacy
+        public RecipesController(IRecipeService recipeService)
         {
             this.recipeService = recipeService;
         }
@@ -34,7 +35,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Recipe>> addRecipe([FromForm] CreateRecipeDto recipeDto)
+        public async Task<ActionResult<Recipe>> addRecipe(CreateRecipeDto recipeDto)
         { 
             var recipe = await recipeService.AddRecipeAsync(recipeDto);
         

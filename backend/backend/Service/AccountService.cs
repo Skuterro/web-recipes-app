@@ -1,37 +1,30 @@
-﻿using backend.IService;
+﻿using backend.Entities;
+using backend.IService;
 using backend.models;
+using backend.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Service
-{
-    public class AuthService : IAuthService
+{/*
+    public class AccountService : IAccountService
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
 
-        public AuthService(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
         }
 
-        public async Task<string> Register(RegisterUserDto registerUserDto)
+        //dodaj acitionResult
+        public async Task<ActionResult<string>> Register(RegisterUserDto registerUserDto)
         {
-            var user = new User
-            {
-                UserName = registerUserDto.UserName,
-                Email = registerUserDto.Email,
-            };
 
-            var result = await _userManager.
-                CreateAsync(user, registerUserDto.Password);
 
-            if (result.Succeeded)
-            {
-                return "User registered successfully";
-            }
-
-            return string.Join(", ", result.Errors);
+            return result;
         }
 
         public async Task<string> Login(LoginUserDto loginUserDto)
@@ -48,5 +41,5 @@ namespace backend.Service
         }
 
 
-    }
+    }*/
 }

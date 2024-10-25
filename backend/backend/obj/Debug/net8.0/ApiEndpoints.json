@@ -1,50 +1,55 @@
 [
   {
-    "ContainingType": "backend.Controllers.AuthController",
+    "ContainingType": "backend.Controllers.AccountController",
     "Method": "Login",
-    "RelativePath": "api/Auth/login",
+    "RelativePath": "api/Account/login",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "UserName",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Password",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "loginUserDto",
+        "Type": "backend.models.LoginUserDto",
+        "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "backend.Models.AuthResponseDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
-    "ContainingType": "backend.Controllers.AuthController",
+    "ContainingType": "backend.Controllers.AccountController",
     "Method": "Register",
-    "RelativePath": "api/Auth/register",
+    "RelativePath": "api/Account/register",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "UserName",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Email",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Password",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "registerUserDto",
+        "Type": "backend.models.RegisterUserDto",
+        "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "backend.Controllers.RecipesController",
@@ -56,7 +61,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[backend.models.Recipe, backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[backend.Entities.Recipe, backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -107,7 +112,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "backend.models.Recipe",
+        "Type": "backend.Entities.Recipe",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -133,7 +138,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "backend.models.Recipe",
+        "Type": "backend.Entities.Recipe",
         "MediaTypes": [
           "text/plain",
           "application/json",

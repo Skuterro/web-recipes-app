@@ -1,8 +1,13 @@
-﻿namespace backend.models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace backend.models
 {
     public class LoginUserDto
     {
-        public string UserName { get; set; } = null!;
-        public string Password { get; set; } = null!;
+        [Required]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        public string Password { get; set; } = string.Empty;
     }
 }

@@ -1,9 +1,11 @@
 import './App.css';
 import { Routing } from "./router/Routing";
-
+import { AuthProvider } from './providers/AuthProvider';
 function App() {
   return (
-    <Routing/>
+    <AuthProvider>
+      <Routing/>
+    </AuthProvider>
   );
 }
 

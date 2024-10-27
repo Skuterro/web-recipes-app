@@ -104,10 +104,11 @@ namespace backend.Controllers
             }
 
             var token = GenerateToken(user);
+            SetTokenInCookie(token);
 
             return Ok(new AuthResponseDto
             {
-                Token = token,
+                //Token = token,
                 IsSuccess = true,
                 Message = "Login success!"
             });
@@ -142,7 +143,7 @@ namespace backend.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(60),
+                Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials
                 (
                     new SymmetricSecurityKey(key),
@@ -153,6 +154,19 @@ namespace backend.Controllers
             var token = TokenHandler.CreateToken(tokenDescriptor);
 
             return TokenHandler.WriteToken(token);
+        }
+
+        private void SetTokenInCookie(string token)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTimeOffset.UtcNow.AddDays(1),
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            };
+
+            Response.Cookies.Append("jwt", token, cookieOptions);
         }
 
     }

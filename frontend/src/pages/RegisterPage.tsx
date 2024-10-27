@@ -11,18 +11,18 @@ interface RegisterUserForm {
   userName: string;
   email: string;
   password: string;
+  roles : string[];
 }
 
 export const RegisterPage = () => {
 
   const handleRegister = async (values: RegisterUserForm) => {
-    const formData = new FormData();
-    formData.append("userName",values.userName);
-    formData.append("email",values.email);
-    formData.append("password",values.password);
-    
-
-    const response = await axios.post("https://localhost:7061/api/Auth/register", formData);
+    const response = await axios.post("https://localhost:7061/api/Account/register", {
+      userName: values.userName,
+      email: values.email,
+      password: values.password,
+      roles: values.roles || []
+    });
 
     console.log(response.data);
   };
@@ -45,7 +45,7 @@ export const RegisterPage = () => {
           <NavItem to="/login" text="Sign in"/>
         </div>
         <Formik
-          initialValues={{ userName: '', email: '', password: '' }}
+          initialValues={{ userName: '', email: '', password: '', roles: [] }}
           onSubmit={handleRegister}
           validationSchema={validationSchema}
         >

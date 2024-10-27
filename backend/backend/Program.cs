@@ -29,6 +29,7 @@ builder.Services.AddAuthentication(opt =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
+
         ValidAudience = JWTSetting["ValidAudience"],
         ValidIssuer = JWTSetting["ValidIssuer"],
         IssuerSigningKey = new SymmetricSecurityKey(
@@ -75,7 +76,7 @@ builder.Services.AddCors(options =>
         policyBuilder.WithOrigins("http://localhost:3000");
         policyBuilder.AllowAnyHeader();
         policyBuilder.AllowAnyMethod();
-       
+        policyBuilder.AllowCredentials();
     });
 });
 

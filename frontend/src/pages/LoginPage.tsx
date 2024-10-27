@@ -4,28 +4,31 @@ import { GiPadlock } from "react-icons/gi";
 import { Layout } from "../components/layout/Layout";
 import { NavItem } from "../components/layout/Navbar";
 import * as Yup from "yup";
-import axios from 'axios';
+import { AuthContext } from "../providers/AuthProvider";
+import { useContext } from "react";
 
 interface LoginUserForm {
-  userName: string;
+  email: string;
   password: string;
 }
 
 export const LoginPage = () => {
+  const { handleLogin } = useContext(AuthContext);
 
-  const handleLogin = async (values: LoginUserForm) => {
+  const handleLoginClick = async (values: LoginUserForm) => {
     const formData = new FormData();
-    formData.append("userName", values.userName);
+    formData.append("email", values.email);
     formData.append("password", values.password);
-    console.log(formData);
+    /*console.log(formData);
     const response = await axios.post("https://localhost:7061/api/Auth/login", formData);
     
 
-    console.log(response.data);
+    console.log(response.data);*/
+    await handleLogin(values.email, values.password);
   }
 
   const validationSchema = Yup.object().shape({
-    userName: Yup.string().required("Username is required"),
+    email: Yup.string().required("Emailis required"),
     password: Yup.string().required("Password is required"),
   });
 
@@ -41,8 +44,8 @@ export const LoginPage = () => {
           <NavItem to="/register" text="Sign up"/>
         </div>
         <Formik
-          initialValues={{ userName: '', password: '' }}
-          onSubmit={handleLogin}
+          initialValues={{ email: '', password: '' }}
+          onSubmit={handleLoginClick}
           validationSchema={validationSchema}
         >
           <Form>
@@ -50,9 +53,9 @@ export const LoginPage = () => {
               <div className="flex items-center bg-custom-gray-3 rounded-xl px-2 mb-2 w-full">
                 <FaRegEnvelope className="mr-2 ml-1 text-white "  />
                 <Field
-                  name="userName"
-                  type="text"
-                  placeholder="Username"
+                  name="email"
+                  type="email"
+                  placeholder="Email"
                   className="bg-custom-gray-3 p-2 border-none outline-none w-full placeholder-white text-white"
                 />
                 

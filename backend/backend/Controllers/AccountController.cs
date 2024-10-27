@@ -32,7 +32,7 @@ namespace backend.Controllers
             this._configuration = configuration;
         }
         
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<ActionResult<string>> Register(RegisterUserDto registerUserDto)
         {
             if (!ModelState.IsValid) 
@@ -73,7 +73,7 @@ namespace backend.Controllers
             });
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<ActionResult<AuthResponseDto>> Login(LoginUserDto loginUserDto)
         {
             if (!ModelState.IsValid)
@@ -160,10 +160,10 @@ namespace backend.Controllers
         {
             var cookieOptions = new CookieOptions
             {
-                HttpOnly = true,
-                Expires = DateTimeOffset.UtcNow.AddDays(1),
+                HttpOnly = false,
+                Expires = DateTimeOffset.UtcNow.AddHours(1),
                 Secure = true,
-                SameSite = SameSiteMode.Strict
+                SameSite = SameSiteMode.None
             };
 
             Response.Cookies.Append("jwt", token, cookieOptions);

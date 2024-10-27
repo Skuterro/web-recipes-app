@@ -1,6 +1,8 @@
 ﻿using backend.Entities;
 using backend.IService;
 using backend.models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
@@ -18,6 +20,7 @@ namespace backend.Controllers
             this.recipeService = recipeService;
         }
 
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         public async Task<ActionResult<List<Recipe>>> getRecipes()
         {

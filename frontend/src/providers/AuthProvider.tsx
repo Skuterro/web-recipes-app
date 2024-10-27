@@ -28,17 +28,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const handleLogin = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      const response = await axios.post("https://localhost:7061/api/Account/login", {
+      const response = await axios.post("https://localhost:7061/api/Account/Login", {
         email,
         password
       }, {
         withCredentials: true
       });
-      console.log(response.data);
-      // Zakładam, że odpowiedź zawiera użytkownika w response.data.user
-      //setLoggedUser(response.data.user); // Ustawienie użytkownika po pomyślnym logowaniu
-    //} catch (error) {
-      //console.error('Login failed:', error);
     } finally {
       setIsLoading(false);
     }

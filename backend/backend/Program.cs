@@ -42,7 +42,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c=>{
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = @"JWT Authorization Example : Bearer eyellfealeafjoaefjfe",
+        Description = @"JWT Authorization Example : Bearer JWT",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -57,7 +57,7 @@ builder.Services.AddSwaggerGen(c=>{
                     Type = ReferenceType.SecurityScheme,
                     Id = "Bearer"
                 },
-                Scheme = "outh2",
+                Scheme = "oauth2",
                 Name = "Bearer",
                 In = ParameterLocation.Header,
             },

@@ -17,7 +17,7 @@ interface RegisterUserForm {
 export const RegisterPage = () => {
 
   const handleRegister = async (values: RegisterUserForm) => {
-    const response = await axios.post("https://localhost:7061/api/Account/register", {
+    const response = await axios.post("https://localhost:7061/api/Account/Register", {
       userName: values.userName,
       email: values.email,
       password: values.password,

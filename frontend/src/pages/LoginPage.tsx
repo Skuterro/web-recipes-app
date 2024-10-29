@@ -5,7 +5,9 @@ import { Layout } from "../components/layout/Layout";
 import { NavItem } from "../components/layout/Navbar";
 import * as Yup from "yup";
 import { AuthContext } from "../providers/AuthProvider";
-import { useContext } from "react";
+import { useAuth } from "../providers/AuthProvider";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 interface LoginUserForm {
   email: string;
@@ -13,18 +15,26 @@ interface LoginUserForm {
 }
 
 export const LoginPage = () => {
-  const { handleLogin } = useContext(AuthContext);
+  const { setLoggedUser } = useAuth();
 
-  const handleLoginClick = async (values: LoginUserForm) => {
-    const formData = new FormData();
-    formData.append("email", values.email);
-    formData.append("password", values.password);
-    /*console.log(formData);
-    const response = await axios.post("https://localhost:7061/api/Auth/login", formData);
-    
+  const navigate = useNavigate();
 
-    console.log(response.data);*/
-    await handleLogin(values.email, values.password);
+  const handleLoginClick = async ({ email, password }: LoginUserForm) => {
+
+    const response = await axios.post("https://localhost:7061/api/Account/Login", {
+      email,
+      password
+    }, {
+      withCredentials: true
+    });
+    const user = {
+      id: response.data.userId,
+      email: response.data.email,
+      username: response.data.name,
+      role: "user",
+    };
+    setLoggedUser(user);
+    navigate("/profile");
   }
 
   const validationSchema = Yup.object().shape({

@@ -19,8 +19,7 @@ namespace backend.Controllers
         {
             this.recipeService = recipeService;
         }
-
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        
         [HttpGet]
         public async Task<ActionResult<List<Recipe>>> getRecipes()
         {
@@ -37,6 +36,7 @@ namespace backend.Controllers
             return Ok(recipe);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         public async Task<ActionResult<Recipe>> addRecipe(CreateRecipeDto recipeDto)
         { 

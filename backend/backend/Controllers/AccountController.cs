@@ -106,11 +106,11 @@ namespace backend.Controllers
             var token = GenerateToken(user);
             SetTokenInCookie(token);
 
-            return Ok(new AuthResponseDto
+            return Ok(new
             {
-                //Token = token,
-                IsSuccess = true,
-                Message = "Login success!"
+                UserId = user.Id,
+                Email = user.Email,
+                Name = user.UserName
             });
 
         }

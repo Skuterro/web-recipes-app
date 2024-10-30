@@ -2,6 +2,7 @@
 using backend.Entities;
 using backend.IService;
 using backend.models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services
@@ -46,16 +47,21 @@ namespace backend.Services
                 }
             }
 
+            var user = await db.Users.FindAsync(recipeDto.UserId);
+
             var recipe = new Recipe
             {
                 Id = Guid.NewGuid(),
                 Name = recipeDto.Name,
-                Author = recipeDto.Author,
+                UserId = recipeDto.UserId,
+                Author = user,
                 Description = recipeDto.Description,
                 Category = recipeDto.Category,
                 Ingredients = recipeDto.Ingredients,
                 ImageData = imageData
             };
+
+            user.Recipes.Add(recipe);
 
             db.Recipes.Add(recipe);
             await db.SaveChangesAsync();
@@ -77,5 +83,16 @@ namespace backend.Services
 
             return true;
         }
+
+        public async Task<List<Recipe>> GetUserRecipesAsync(string userId)
+        {
+            // Pobranie przepisów użytkownika
+            var recipes = await db.Recipes
+                .Where(r => r.UserId == userId)
+                .ToListAsync();
+
+            return recipes;
+        }
+
     }
 }

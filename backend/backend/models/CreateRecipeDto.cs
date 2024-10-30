@@ -8,7 +8,7 @@ namespace backend.models
         public string Name { get; set; } = string.Empty;
 
         [Required]
-        public string Author { get; set; } = string.Empty;
+        public string UserId { get; set; } = string.Empty;
 
         [Required]
         public string Description { get; set; } = string.Empty;

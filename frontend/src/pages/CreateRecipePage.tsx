@@ -4,10 +4,11 @@ import { Layout } from "../components/layout/Layout";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
 import { Wrapper } from "../components/layout/Wrapper";
+import { useAuth } from "../providers/AuthProvider";
+import Cookies from 'js-cookie';
 
 interface CreateRecipeForm {
   name: string;
-  author: string;
   description: string;
   category: string;
   ingredients: string[];
@@ -18,7 +19,6 @@ const categories = ["Fast Food", "Pasta"];
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Nazwa jest wymagana"),
-  author: Yup.string().required("Autor jest wymagany"),
   description: Yup.string().required("Opis jest wymagany"),
   category: Yup.string().required("Kategoria jest wymagana"),
   ingredients: Yup.array().of(
@@ -27,10 +27,17 @@ const validationSchema = Yup.object().shape({
 });
 
 export const CreateRecipePage = () => {
+
+  const { loggedUser } = useAuth();
+
+  if (!loggedUser) {
+    return <p className="text-center text-red-500">Musisz być zalogowany, aby zobaczyć tę stronę.</p>;
+  }
+
   const handleCreate = async (values: CreateRecipeForm) => {
     const formData = new FormData();
     formData.append("name", values.name);
-    formData.append("author", values.author);
+    formData.append("userId", loggedUser.id);
     formData.append("description", values.description);
     formData.append("category", values.category);
     formData.append("image", values.image as Blob);
@@ -42,7 +49,15 @@ export const CreateRecipePage = () => {
       console.log(`${key}: ${value}`);
   });
 
-    const response = await axios.post("https://localhost:7061/api/Recipes", formData); 
+    const token = Cookies.get("jwt");
+
+    const response = await axios.post("https://localhost:7061/api/Recipes", formData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      withCredentials: true
+      }
+    ); 
 
     console.log(response.data);
   };
@@ -55,7 +70,6 @@ export const CreateRecipePage = () => {
         <Formik
           initialValues={{
             name: "",
-            author: "",
             description: "",
             category: "",
             ingredients: [""],
@@ -76,18 +90,6 @@ export const CreateRecipePage = () => {
                   className="border rounded p-2 w-full"
                 />
                 <ErrorMessage name="name" component="div" className="text-red-600" />
-              </div>
-
-              <div>
-                <label htmlFor="author" className="block">
-                  Autor
-                </label>
-                <Field
-                  name="author"
-                  type="text"
-                  className="border rounded p-2 w-full"
-                />
-                <ErrorMessage name="author" component="div" className="text-red-600" />
               </div>
 
               <div>

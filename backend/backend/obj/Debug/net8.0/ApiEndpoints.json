@@ -85,7 +85,7 @@
         "IsRequired": false
       },
       {
-        "Name": "Author",
+        "Name": "UserId",
         "Type": "System.String",
         "IsRequired": false
       },
@@ -163,5 +163,31 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.RecipesController",
+    "Method": "getUserRecipes",
+    "RelativePath": "api/Recipes/user/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[backend.Entities.Recipe, backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]

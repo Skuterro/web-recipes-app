@@ -9,10 +9,14 @@ namespace backend.Entities
         public Guid Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        [ForeignKey("User")]
+        public string UserId { get; set; }
 
         [Required]
-        public string Author { get; set; }
+        public User Author { get; set; }
+
+        [Required]
+        public string Name { get; set; }
 
         [Required]
         public string Description { get; set; }

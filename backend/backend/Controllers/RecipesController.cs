@@ -28,6 +28,15 @@ namespace backend.Controllers
             return Ok(recipes);
         }
 
+
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<List<Recipe>>> getUserRecipes(string userId)
+        {
+            var recipes = await recipeService.GetUserRecipesAsync(userId);
+
+            return Ok(recipes);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Recipe>> getRecipeById(Guid id)
         {

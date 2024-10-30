@@ -31,7 +31,7 @@ namespace backend.Controllers
             this._roleManager = roleManager;
             this._configuration = configuration;
         }
-        
+
         [HttpPost("Register")]
         public async Task<ActionResult<string>> Register(RegisterUserDto registerUserDto)
         {

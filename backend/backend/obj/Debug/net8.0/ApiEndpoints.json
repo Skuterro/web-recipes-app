@@ -52,6 +52,16 @@
     ]
   },
   {
+    "ContainingType": "backend.Controllers.AccountController",
+    "Method": "getUserByToken",
+    "RelativePath": "api/Account/Token",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "backend.Controllers.RecipesController",
     "Method": "getRecipes",
     "RelativePath": "api/Recipes",

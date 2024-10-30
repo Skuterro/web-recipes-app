@@ -1,6 +1,6 @@
 // AuthProvider.js
-import { createContext, ReactNode, useContext, useState } from "react";
-import { User } from "../models/user"; // Zakładam, że masz zdefiniowany model User
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { User } from "../models/user";
 import axios from 'axios';
 import Cookies from "js-cookie";
 
@@ -11,16 +11,12 @@ type AuthProviderProps = {
 export interface AuthContextType {
   loggedUser?: User;
   setLoggedUser: (user?: User) => void;
-  //isLoading: boolean;
-  //handleLogin: (email: string, password: string) => Promise<void>;
   handleLogout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({
   loggedUser: undefined,
   setLoggedUser: () => {},
-  //isLoading: true,
-  //handleLogin: async () => {},
   handleLogout: () => {},
 });
 
@@ -30,32 +26,37 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loggedUser, setLoggedUser] = useState<User | undefined>(undefined);
-  //const [isLoading, setIsLoading] = useState<boolean>(false);
-
-
-/*
-  const handleLogin = async (email: string, password: string) => {
-    //setIsLoading(true);
-
-      const response = await axios.post("https://localhost:7061/api/Account/Login", {
-        email,
-        password
-      }, {
-        withCredentials: true
-      });
-      const user = {
-        id: response.data.userId,
-        email: response.data.email,
-        username: response.data.name,
-        role: "user",
-      };
-      setLoggedUser(user);
-  };*/
 
   const handleLogout = () => {
     setLoggedUser(undefined);
     Cookies.remove("jwt");
   }
+
+  const loadUser = async () => {
+
+    const token = Cookies.get("jwt");
+
+    const response = await axios.get("https://localhost:7061/api/Account/Token",{
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      withCredentials: true,
+    });
+    const user = {
+      id: response.data.userId,
+      email: response.data.email,
+      username: response.data.name,
+      role: "user",
+    };
+    setLoggedUser(user);
+  };
+
+  useEffect(() => {
+
+    if(loggedUser === undefined){
+      loadUser();
+    }
+  },[]);
 
   return (
     <AuthContext.Provider value={{ loggedUser, setLoggedUser, handleLogout }}>

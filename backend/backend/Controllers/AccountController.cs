@@ -2,6 +2,7 @@
 using backend.IService;
 using backend.models;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -115,6 +116,72 @@ namespace backend.Controllers
 
         }
 
+        [HttpGet("Token")]
+        public async Task<IActionResult> getUserByToken()
+        {
+            if (Request.Cookies.TryGetValue("jwt", out var token))
+            {
+                Console.WriteLine($"Token w ciasteczku: {token}");
+
+
+            }
+
+            var claimsPrincipal = ValidateToken(token);
+            if (claimsPrincipal == null)
+            {
+                return Unauthorized("Token jest nieprawidłowy.");
+            }
+
+            var email = claimsPrincipal.FindFirst(ClaimTypes.Email);
+
+
+            if (email == null)
+            {
+                Console.WriteLine("email nie ten teges");
+                return NotFound("email nie ten teges");
+            }
+
+            var user = await _userManager.FindByEmailAsync(email.Value);
+
+            if (user is null)
+            {
+                return NotFound("user not found");
+            }
+
+            return Ok(new
+            {
+                UserId = user.Id,
+                Email = user.Email,
+                Name = user.UserName
+            });
+
+        }
+
+        private ClaimsPrincipal ValidateToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration["JWTSetting:securityKey"]);
+
+            try
+            {
+                var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero // Brak tolerancji czasu
+                };
+
+                return tokenHandler.ValidateToken(token, validationParameters, out var validatedToken);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Błąd walidacji tokena: {ex.Message}");
+                return null; // Token jest nieprawidłowy
+            }
+        }
+
         private string GenerateToken(User user)
         {
             var TokenHandler = new JwtSecurityTokenHandler();
@@ -124,21 +191,22 @@ namespace backend.Controllers
 
             var roles = _userManager.GetRolesAsync(user).Result;
 
-            List<Claim> claims = [
-                new (JwtRegisteredClaimNames.Email, user.Email ?? ""),
-                new (JwtRegisteredClaimNames.Name , user.UserName ?? ""),
-                new (JwtRegisteredClaimNames.NameId , user.Id ?? ""),
+            List<Claim> claims = new List<Claim> {
+
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new (JwtRegisteredClaimNames.Aud,
                 _configuration.GetSection("JWTSetting").GetSection("validAudience").Value!),
                 new (JwtRegisteredClaimNames.Iss,
                 _configuration.GetSection("JWTSetting").GetSection("validIssuer").Value!)
-                ];
-            
-
+            };
+           
+            /*
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+            }*/
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
